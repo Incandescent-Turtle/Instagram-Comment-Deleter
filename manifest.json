@@ -1,0 +1,29 @@
+{
+  "name": "IG Comment Deleter",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "This extension allows you to delete all of the comments you have ever made on Instagram. It will take a while, as it takes control on your browser and deletes tham manually. While automating such a task should be allowed by Instagram terms of service, I make no guarantee that Instagram will not suspend or limit your account for using this.",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "host_permissions": [
+    "https://www.instagram.com/*"
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self' 'wasm-unsafe-eval'"
+  }
+}

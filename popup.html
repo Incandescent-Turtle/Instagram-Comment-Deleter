@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Instagram Comment Deleter</title>
+    </head>
+    <body>
+        <button id="deleteComments">Delete All Comments</button>
+        <p>Deleted comments count: <span id="deletedCount">0</span></p>
+
+        <script>
+            document.getElementById('deleteComments').addEventListener('click', () =>
+            {
+                chrome.tabs.query({active: true, currentWindow: true}, (tabs) =>
+                {
+                    chrome.scripting.executeScript({
+                        target: {tabId: tabs[0].id},
+                        files: ['content.js']
+                    });
+                });
+            });
+
+            const updateDeletedCount = () =>
+            {
+                chrome.storage.local.get(['deletedCount'], (result) =>
+                {
+                    document.getElementById('deletedCount').textContent = result.deletedCount || 0;
+                });
+            };
+
+            updateDeletedCount();
+
+            // Listen for storage changes to update the count in the popup
+            chrome.storage.onChanged.addListener((changes) =>
+            {
+                if (changes.deletedCount)
+                {
+                    updateDeletedCount();
+                }
+            });
+        </script>
+    </body>
+</html>
